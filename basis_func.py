@@ -46,9 +46,11 @@ def tri_p1(x,y,eval_p):
         
     #Evaluating the phi functions
     CoeffMatrix = np.array((dx_phi,dy_phi)).T
+    
     if eval_p.shape == (2,):
         Length = 1
         eval_p = eval_p.reshape((1,2))
+        print("\nWARNING: THE SHAPE OF eval_p SHOULD BE (n,2)!!!\n")
     else:
         Length = eval_p.shape[0]
     phi = np.zeros((Length,3))
@@ -57,6 +59,6 @@ def tri_p1(x,y,eval_p):
         phi[i,:] = CoeffMatrix.dot(eval_p[i,:])+c
     
     #Computes the area using cross product
-    surf_e = np.linalg.norm(np.cross(EvalMatrix[0,:]-EvalMatrix[1,:],EvalMatrix[0,:]-EvalMatrix[2,:]))/2.0
+    surf_e = abs(np.linalg.det(EvalMatrix))/2.0
     
     return dx_phi,dy_phi,phi[0],surf_e
