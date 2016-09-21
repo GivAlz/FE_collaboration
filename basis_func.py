@@ -11,14 +11,52 @@ def tri_p1(x,y,eval_p):
     eval_p: (n,2) array of the n evaluation points. first
             column indicates x-coord, second y-coord.\n
 
+    The basis functions are of the type:
+    
+                f(x,y) = ax+by+c
+    
+    where a is the x-derivative and y is the y-derivative.
+    The coefficients are obtained solved a linear system:
+                
+                f(x,y) = A.dot(dx,dy,c) = (1,0,0) [or similar]
+    
     Output:
 
     dx_phi : the three x-derivatives.\n
     dy_phi : the three y-derivatives.\n
-    phi    : (n,3) array of the three shape funtions ath the n eval points.\n
+    phi    : (n,3) array of the three shape funtions at the n eval points.\n
     surf_e : the triangle area.\n
 
     Notice: all the quantities are computed on the current element
 
     """
+    
+    #Building matrix A=(x,y,1)
+    EvalMatrix = np.ones((3,3))
+    EvalMatrix[:,:2] = np.array((x,y)).T
+    
+    dx_phi = np.zeros(3)
+    dy_phi = np.zeros(3)
+    c = np.zeros(3)
+    I = np.eye(3)
+    
+    #Solving Ax=b with b = (1,0,0), (0,1,0), (0,0,1)
+    for i in range(3):
+        dx_phi[i],dy_phi[i],c[i] = np.linalg.solve(EvalMatrix,I[:,i])
+        
+    #Evaluating the phi functions
+    CoeffMatrix = np.array((dx_phi,dy_phi)).T
+    if eval_p.shape == (2,):
+        Length = 1
+        eval_p = eval_p.reshape((1,2))
+    else:
+        Length = eval_p.shape[0]
+    phi = np.zeros((Length,3))
+    
+    for i in range(Length):
+        phi[i,:] = CoeffMatrix.dot(eval_p[i,:])+c
+    
+    #Computes the area using cross product
+    surf_e = np.linalg.norm(np.cross(EvalMatrix[0,:]-EvalMatrix[1,:],EvalMatrix[0,:]-EvalMatrix[2,:]))/2.0
+    
     return dx_phi,dy_phi,phi[0],surf_e
