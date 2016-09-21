@@ -53,12 +53,10 @@ def tri_p1(x,y,eval_p):
         print("\nWARNING: THE SHAPE OF eval_p SHOULD BE (n,2)!!!\n")
     else:
         Length = eval_p.shape[0]
-    phi = np.zeros((Length,3))
     
-    for i in range(Length):
-        phi[i,:] = CoeffMatrix.dot(eval_p[i,:])+c
-    
+    phi = np.einsum('ij,ij->i',CoeffMatrix,eval_p)+c
+
     #Computes the area using cross product
     surf_e = abs(np.linalg.det(EvalMatrix))/2.0
     
-    return dx_phi,dy_phi,phi[0],surf_e
+    return dx_phi,dy_phi,phi,surf_e
