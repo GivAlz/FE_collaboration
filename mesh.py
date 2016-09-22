@@ -56,5 +56,9 @@ def read_msh(filename):
             topo[r_id,:] = np.array([[row[0],row[2],row[1]]])
         r_id+=1
 
-    print r_id
+    #print r_id
+
+    topo = topo.astype(int)
+    b_nodes = b_nodes.astype(int)
+
     return topo , x , y , nodes , b_nodes

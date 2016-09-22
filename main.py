@@ -15,7 +15,7 @@ def clear_rows(A,b_nodes):
 
 
 if __name__ == "__main__":
-    topo, x, y, nodes, b_nodes = read_mesh(mesh/square.msh)
+    topo, x, y, nodes, b_nodes = read_msh("mesh/square.msh")
 
     A = gradu_gradv(topo,x,y)
 
@@ -28,4 +28,3 @@ if __name__ == "__main__":
     sol = np.linalg.solve(A,F)
 
     plot_sol_p1(x,y,sol,topo)
-    
