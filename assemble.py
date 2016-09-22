@@ -14,7 +14,7 @@ def gradu_gradv(topo,x,y):
         local_matrix = surf_e*(local_x + local_y)
 
         col,row = np.meshgrid(elem,elem)
-        A[np.ndarray.flatten[row],np.ndarray[col]] += local_matrix
+        A[np.ndarray.flatten(row),np.ndarray.flatten(col)] += local_matrix.reshape(-1)
 
     return A
 
